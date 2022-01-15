@@ -1,4 +1,58 @@
 @page "/"
+@using BlazingPizza.Data
+@using System.Net.Http.Json
 
-<h1>Blazing Pizzas</h1>
+@inject PizzaService PizzaSvc
+@inject HttpClient HttpClient  
+@inject NavigationManager NavigationManager
+@inject PizzaSalesState SaleState
+@inject OrderState OrderState
+
+
+<div class="main">
+    <h1>Welcome to Blazing Pizzas</h1>
+    <div>
+        <p>Today, we've sold @SaleState.PizzasSoldToday Pizzas today.</p>
+        <button @onclick="IncrementSales"> Buy a Pizza </button>
+        <p>Laures math @(5 * SaleState.PizzasSoldToday)</p>
+    </div>
+      <ul class="pizza-cards">
+        @if (specials != null)
+        {
+            @foreach(var special in specials)
+            {
+                <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
+                    <div class="pizza-info">
+                        <span class="title">@special.Name</span>
+                            @special.Description
+                        <span class="price">@special.GetFormattedBasePrice()</span>
+                    </div>
+                </li>
+            }
+        }
+      </ul> 
+</div>
+<div>
+@if(OrderState.ShowingConfigureDialog) 
+{
+    <ConfigurePizzaDialogue 
+        Pizza="OrderState.ConfiguringPizza" 
+        OnCancel="OrderState.CancelConfigurePizzaDialog"
+        OnConfirm="OrderState.ConfirmConfigurePizzaDialog" />
+}
+</div>
+
+@code {
+    private List<PizzaSpecial> specials;
+    private void IncrementSales()
+    {
+        SaleState.PizzasSoldToday++;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        //todaysPizzas = await PizzaSvc.GetPizzasAsync();
+        specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>(NavigationManager.BaseUri + "specials");
+    }
+}
 		
