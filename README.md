@@ -1,4 +1,18 @@
 
+# About This Project
+
+https://github.com/dotnet-presentations/blazor-workshop/
+
+Reding and applying the following get you a little into Blazor.
+ https://docs.microsoft.com/en-us/learn/modules/interact-with-data-blazor-web-apps/
+
+https://github.com/MicrosoftDocs/mslearn-interact-with-data-blazor-web-apps.git
+
+
+
+-----------------------
+Microsoft original readme stuff....
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
